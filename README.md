@@ -20,3 +20,32 @@
 
 ### outras alternativas:
 - Terraform
+
+
+## Pré-requisitos
+
+- aws cli:
+    - Instalação do cli para seu SO no site da AWS
+    - Configuração de um profile default ao menos: <code>aws configure</code>
+    - Validar a configuração: <code>aws sts get-caller-identity</code>
+- serverless
+    - Instalação da cli do serverless framework: <code>npm install -g serverless</code>
+    - Utilizar os comandos disponíveis:
+        - <code>sls deploy</code>
+        - <code>sls remove</code>
+        - <code>sls offline start</code>
+- sam
+    - Instalação do cli para seu SO no site da AWS
+    - Utilizar os comandos disponíveis:
+        - <code>sam local start-api</code>
+        - <code>sam local invoke "HelloWorldFunction" --event events/event.json</code>
+        - <code>sam build</code>
+        - <code>sam deploy --guided</code>
+        - <code>sam destroy</code>
+- cdk
+    - Instalação do cli da cdk: <code>npm install -g aws-cdk</code>
+    - Utilizar os comandos disponíveis:
+        - <code>cdk bootstrap</code>
+        - <code>cdk deploy</code>
+        - <code>cdk destroy</code>
+        
