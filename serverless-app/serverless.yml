@@ -1,0 +1,82 @@
+# org: guilhermelange
+app: serverless-app
+service: serverless-app
+frameworkVersion: "3"
+
+package:
+    individually: true
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  stage: dev
+  region: us-east-1
+  environment:
+    SAMPLE_TABLE: SlsSampleTable
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+      Resource: "*"
+  # apiGateway:
+  #   name: sls-app
+  # httpApi:
+  httpApi:
+    cors: true
+    name: sls-app
+	
+functions:
+  serverlessGetAll:
+    handler: src/handlers_api/get-all-items.handler
+    name: sls-sample-list
+    memorySize: 128
+    description: Get all itens
+    events:
+      - httpApi: 
+          path: /
+          method: get
+  
+  serverlessFindOne:
+    handler: src/handlers_api/get-by-id.handler
+    name: sls-sample-find
+    memorySize: 128
+    description: Find item by id
+    events:
+      - httpApi: 
+          path: /{id}
+          method: get
+
+  serverlessCreate:
+    handler: src/handlers_api/put-item.handler
+    name: sls-sample-create
+    memorySize: 128
+    description: Create item
+    events:
+      - httpApi: 
+          path: /
+          method: POST
+
+	
+resources:
+  Resources:        
+    SampleTableDynamoDbTable:
+      Type: 'AWS::DynamoDB::Table'
+      # DeletionPolicy: Retain
+      Properties:
+        AttributeDefinitions:
+          -
+            AttributeName: "id"
+            AttributeType: "S"
+        KeySchema:
+          -
+            AttributeName: "id"
+            KeyType: "HASH"
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        StreamSpecification:
+          StreamViewType: "NEW_AND_OLD_IMAGES"
+        TableName: SlsSampleTable
